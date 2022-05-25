@@ -2,13 +2,36 @@
   <span class="visually-hidden">Loading...</span>
 </div>
 
-<table class="table">
-  <tr *ngFor="let product of products">
-    <td>{{product.productId}}</td>
-    <td>{{product.categoryId}}</td>
-    <td>{{product.productName}}</td>
-    <td>{{product.unitPrice}}</td>
+<div class="mb-3">
+  <label for="filterText" class="form-label">Search Product</label>
+  <input type="text" [(ngModel)]="filterText" class="form-control" id="filterText" placeholder="Search">
+</div>
 
-  </tr>
+<div *ngIf="filterText.length>1" class="alert alert-primary">
+You Searched {{filterText}}
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>CategoryId</th>
+      <th>productName</th>
+      <th>unitPrice</th>
+      <th>with vat</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products | filterPipe:filterText">
+      <td>{{product.productId}}</td>
+      <td>{{product.categoryId}}</td>
+      <td>{{product.productName |uppercase}}</td>
+      <td>{{product.unitPrice}}</td>
+      <td>{{product.unitPrice |vatAdded:18 |currency}}</td>
+      <td><button (click)="addToCart(product)" class="btn btn-success">Add to Cart</button></td>
+    </tr>
+  </tbody>
+
 </table>
 
